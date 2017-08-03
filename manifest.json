@@ -1,6 +1,6 @@
 {
-  "short_name": "cboard",
-  "name": "Communication Board",
+  "short_name": "Cboard",
+  "name": "Cboard - AAC Communication Board",
   "icons": [
     {
       "src": "favicon.ico",
@@ -9,5 +9,7 @@
     }
   ],
   "start_url": "./",
-  "display": "standalone"
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
 }
