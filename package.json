@@ -1,5 +1,5 @@
 {
-  "name": "cboard",
+  "name": "cboard-translate",
   "version": "0.1.1",
   "description": "Cboard is an augmentative and alternative communication (AAC) web application, allowing users with speech and language impairments (autism, cerebral palsy) to communicate by symbols and text-to-speech.",
   "keywords": [
@@ -13,8 +13,8 @@
     "tts",
     "text-to-speech"
   ],
-  "homepage": "https://shayc.github.io/cboard",
-  "private": false,
+  "homepage": "https://shayc.github.io/cboard-translate",
+  "private": true,
   "dependencies": {
     "exif-orientation-image": "^1.0.1",
     "iso-639-1": "^1.3.0",
