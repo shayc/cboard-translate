@@ -6,20 +6,20 @@ function getDir(locale) {
 }
 
 const initialState = {
-  locale: '',
+  locale: 'zu',
   dir: '',
   locales: appLocales
 };
 
 function languageProviderReducer(state = initialState, action) {
   switch (action.type) {
-    case CHANGE_LOCALE:
-      return Object.assign({}, state, {
-        locale: action.locale,
-        dir: getDir(action.locale)
-      });
-    case SET_LOCALES:
-      return Object.assign({}, state, { locales: action.locales });
+    // case CHANGE_LOCALE:
+    //   return Object.assign({}, state, {
+    //     locale: action.locale,
+    //     dir: getDir(action.locale)
+    //   });
+    // case SET_LOCALES:
+    //   return Object.assign({}, state, { locales: action.locales });
     default:
       return state;
   }

@@ -24,6 +24,7 @@ import Settings from '../Settings';
 import Grid from '../Grid';
 import Output from './Output';
 import Toolbar from './Toolbar';
+import mulberrySymbols from '../../api/mulberry-symbols.json';
 
 import './Board.css';
 
@@ -31,20 +32,30 @@ class Board extends Component {
   constructor(props) {
     super(props);
 
+    const symbolsPerPage = 250;
+    const from = 0;
+    const to = from + symbolsPerPage;
     this.state = {
       output: [],
       selectedSymbols: [],
       isSelecting: false,
       isEditing: false,
       symbolDetailsOpen: false,
-      settingsOpen: false
+      settingsOpen: false,
+      symbolsPerPage,
+      sliceFrom: from,
+      sliceTo: to
     };
   }
 
+  symbolsRef = {};
+  allSymbols = [];
+
+  componentWillMount() {
+    this.allSymbols = this.convertMulberryToSymbols(mulberrySymbols);
+  }
+
   speak = text => {
-    if (!text) {
-      return;
-    }
     speech.speak(text);
   };
 
@@ -105,9 +116,8 @@ class Board extends Component {
         changeBoard(symbol.boardId);
         break;
       default:
-        const { intl } = this.props;
         this.outputPush(symbol);
-        this.speak(intl.formatMessage({ id: symbol.label }));
+        this.speak(this.symbolsRef[symbol.id].textContent);
     }
   };
 
@@ -175,7 +185,7 @@ class Board extends Component {
   generateSymbols(symbols, boardId) {
     return Object.keys(symbols).map((id, index) => {
       const symbol = symbols[id];
-      symbol.key = `${boardId}.${id}`;
+      symbol.key = id;
       symbol.isSelected = this.state.selectedSymbols.includes(symbol.id);
 
       const { type, label, img, key, isSelected } = symbol;
@@ -193,6 +203,7 @@ class Board extends Component {
           onClick={() => {
             this.handleSymbolClick(symbol);
           }}
+          ref={button => this.symbolsRef[id]}
         >
           {img &&
             <div className="Symbol__container">
@@ -207,9 +218,27 @@ class Board extends Component {
     });
   }
 
+  convertMulberryToSymbols() {
+    const allSymbols = [];
+
+    for (let i = 0; i < mulberrySymbols.length; i += 1) {
+      allSymbols.push({
+        id: i,
+        type: 'symbol',
+        label: mulberrySymbols[i].id,
+        img: mulberrySymbols[i].src
+      });
+    }
+    return allSymbols;
+  }
+
   render() {
     const { board, navigationHistory, dir } = this.props;
-    const symbols = this.generateSymbols(board.symbols, board.id);
+    const slicedSymbols = this.allSymbols.slice(
+      this.state.sliceFrom,
+      this.state.sliceTo
+    );
+    const symbols = this.generateSymbols(slicedSymbols, board.id);
 
     return (
       <div
@@ -227,49 +256,52 @@ class Board extends Component {
           dir={dir}
         />
 
-        <Toolbar className="Board__toolbar" title={board.id}>
-          <div className="Toolbar__group Toolbar__group--start">
-            {!this.state.isSelecting &&
-              <IconButton
-                style={{
-                  opacity: navigationHistory.length > 1 ? 1 : 0.3
-                }}
-                className="back-button"
-                color="contrast"
-                disabled={navigationHistory.length === 1}
-                onClick={this.handleBackClick}
-              >
-                <ArrowBackIcon />
-              </IconButton>}
-            {this.state.isSelecting &&
-              <div>
-                <IconButton
-                  style={{
-                    opacity: this.state.selectedSymbols.length ? 1 : 0.3
-                  }}
-                  color="contrast"
-                  disabled={!this.state.selectedSymbols.length}
-                  onClick={this.handleDeleteClick}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </div>}
-          </div>
+        <Toolbar className="Board__toolbar">
+          <div className="Toolbar__group Toolbar__group--start" />
           <div className="Toolbar__group Toolbar__group--end">
             {this.state.isSelecting && <div />}
 
-            <Button color="contrast" onClick={this.handleSelectClick}>
-              {!this.state.isSelecting &&
-                <FormattedMessage {...messages.select} />}
-              {this.state.isSelecting &&
-                <FormattedMessage {...messages.cancel} />}
+            <Button
+              color="contrast"
+              onClick={() => {
+                this.setState(prevState => {
+                  const from = prevState.sliceFrom + prevState.symbolsPerPage;
+                  const to = from + prevState.symbolsPerPage;
+                  return {
+                    sliceFrom:
+                      from >= this.allSymbols.length
+                        ? prevState.sliceFrom
+                        : from,
+                    sliceTo:
+                      to > this.allSymbols.length ? this.allSymbols.length : to
+                  };
+                });
+              }}
+            >
+              NEXT
             </Button>
-            <IconButton color="contrast" onClick={this.handleAddClick}>
-              <AddBoxIcon />
-            </IconButton>
-            <IconButton color="contrast" onClick={this.handleSettingsClick}>
-              <SettingsIcon />
-            </IconButton>
+            <Button
+              color="contrast"
+              onClick={() => {
+                this.state.sliceFrom &&
+                  this.setState(prevState => {
+                    const from = prevState.sliceFrom - prevState.symbolsPerPage;
+                    const to = from + prevState.symbolsPerPage;
+                    return {
+                      sliceFrom:
+                        from < 0
+                          ? 0
+                          : from,
+                      sliceTo:
+                        to < 0
+                          ? 0 + prevState.symbolsPerPage
+                          : to
+                    };
+                  });
+              }}
+            >
+              PREV
+            </Button>
           </div>
         </Toolbar>
 

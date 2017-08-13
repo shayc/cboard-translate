@@ -27,8 +27,6 @@ class Speech extends Component {
   handleMenuItemClick = ({ voiceURI, lang }) => {
     const { changeVoice, intl } = this.props;
     changeVoice(voiceURI, lang);
-    const text = intl.formatMessage(messages.sampleSentence);
-    speech.speak(text);
     this.setState({ voiceOpen: false });
   };
 
@@ -38,10 +36,6 @@ class Speech extends Component {
 
   render() {
     const { open, locale, onCancel, speech: { voices, voiceURI } } = this.props;
-
-    const localeVoices = voices.filter(
-      voice => voice.lang.slice(0, 2) === locale
-    );
 
     return (
       <div className="Speech">
@@ -68,7 +62,7 @@ class Speech extends Component {
             open={this.state.voiceOpen}
             onRequestClose={this.handleVoiceRequestClose}
           >
-            {localeVoices.map((voice, index) =>
+            {voices.map((voice, index) =>
               <MenuItem
                 key={index}
                 selected={index === this.state.selectedVoiceIndex}
