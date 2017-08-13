@@ -203,7 +203,7 @@ class Board extends Component {
           onClick={() => {
             this.handleSymbolClick(symbol);
           }}
-          ref={button => this.symbolsRef[id]}
+          ref={ref => this.symbolsRef[id] = ref}
         >
           {img &&
             <div className="Symbol__container">
@@ -302,6 +302,9 @@ class Board extends Component {
             >
               PREV
             </Button>
+            <IconButton color="contrast" onClick={this.handleSettingsClick}>
+              <SettingsIcon />
+            </IconButton>
           </div>
         </Toolbar>
 
