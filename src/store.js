@@ -25,9 +25,10 @@ export default function configureStore(initialState = {}) {
       initialState,
       composeEnhancers(...enhancers)
     );
-    persistStore(store, {}, () => {
-      resolve(store);
-    });
+    resolve(store);
+    // persistStore(store, {}, () => {
+      // resolve(store);
+    // });
   });
 }
 

@@ -42,4 +42,4 @@ async function init() {
 }
 
 init();
-registerServiceWorker();
+// registerServiceWorker();

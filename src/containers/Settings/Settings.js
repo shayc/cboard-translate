@@ -61,19 +61,9 @@ class Settings extends Component {
             </ListSubheader>
           }
         >
-          <ListItem button divider onClick={this.handleLanguageClick}>
-            <LanguageIcon />
-            <ListItemText
-              primary={<FormattedMessage {...messages.language} />}
-            />
-          </ListItem>
           <ListItem button divider onClick={this.handleSpeechClick}>
             <RecordVoiceOverIcon />
             <ListItemText primary={<FormattedMessage {...messages.speech} />} />
-          </ListItem>
-          <ListItem button divider onClick={this.handleAboutClick}>
-            <InfoOutlineIcon />
-            <ListItemText primary={<FormattedMessage {...messages.about} />} />
           </ListItem>
         </List>
         <Language
