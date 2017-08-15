@@ -203,7 +203,9 @@ class Board extends Component {
           onClick={() => {
             this.handleSymbolClick(symbol);
           }}
-          ref={ref => this.symbolsRef[id] = ref}
+          ref={ref => {
+            this.symbolsRef[symbol.id] = ref;
+          }}
         >
           {img &&
             <div className="Symbol__container">
@@ -288,14 +290,8 @@ class Board extends Component {
                     const from = prevState.sliceFrom - prevState.symbolsPerPage;
                     const to = from + prevState.symbolsPerPage;
                     return {
-                      sliceFrom:
-                        from < 0
-                          ? 0
-                          : from,
-                      sliceTo:
-                        to < 0
-                          ? 0 + prevState.symbolsPerPage
-                          : to
+                      sliceFrom: from < 0 ? 0 : from,
+                      sliceTo: to < 0 ? 0 + prevState.symbolsPerPage : to
                     };
                   });
               }}
