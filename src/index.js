@@ -29,13 +29,11 @@ async function init() {
     }
 
     ReactDOM.render(
-      <MuiThemeProvider>
         <Provider store={store}>
           <LanguageProvider>
             <App />
           </LanguageProvider>
-        </Provider>
-      </MuiThemeProvider>,
+        </Provider>,
       document.getElementById('root')
     );
   });

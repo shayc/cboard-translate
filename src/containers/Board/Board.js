@@ -50,6 +50,7 @@ class Board extends Component {
 
   symbolsRef = {};
   allSymbols = [];
+  counter = 0;
 
   componentWillMount() {
     this.allSymbols = this.convertMulberryToSymbols(mulberrySymbols);
@@ -116,7 +117,7 @@ class Board extends Component {
         changeBoard(symbol.boardId);
         break;
       default:
-        this.outputPush(symbol);
+        // this.outputPush(symbol);
         this.speak(this.symbolsRef[symbol.id].textContent);
     }
   };
@@ -198,7 +199,7 @@ class Board extends Component {
 
       return (
         <button
-          key={key}
+          key={this.counter++}
           className={symbolClasses}
           onClick={() => {
             this.handleSymbolClick(symbol);
@@ -249,14 +250,7 @@ class Board extends Component {
           'Board'
         )}
       >
-        <Output
-          className="Board__output"
-          values={this.state.output}
-          onClick={this.handleOutputClick}
-          onClearClick={this.handleOutputClearClick}
-          onBackspaceClick={this.handleOutputBackspaceClick}
-          dir={dir}
-        />
+
 
         <Toolbar className="Board__toolbar">
           <div className="Toolbar__group Toolbar__group--start" />
@@ -305,9 +299,7 @@ class Board extends Component {
         </Toolbar>
 
         <div className="Board__symbols">
-          <Grid id={board.id} edit={this.state.isSelecting}>
             {symbols}
-          </Grid>
         </div>
 
         <SymbolDetails
