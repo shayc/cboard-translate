@@ -242,7 +242,7 @@ class Board extends Component {
       this.state.sliceTo
     );
     const symbols = this.generateSymbols(slicedSymbols, board.id);
-
+    const pageCount = Math.ceil(this.allSymbols.length / this.state.symbolsPerPage);
     return (
       <div
         className={classNames(
@@ -250,13 +250,14 @@ class Board extends Component {
           'Board'
         )}
       >
-
-
         <Toolbar className="Board__toolbar">
-          <div className="Toolbar__group Toolbar__group--start" />
+          <div className="Toolbar__group Toolbar__group--start">
+            <div style={{display: 'block', 'align-self': 'center', width: '190px'}}>
+              {Math.ceil(this.state.sliceTo / this.state.symbolsPerPage)} / {pageCount}
+            </div>
+          </div>
           <div className="Toolbar__group Toolbar__group--end">
             {this.state.isSelecting && <div />}
-
             <Button
               color="contrast"
               onClick={() => {
@@ -299,7 +300,7 @@ class Board extends Component {
         </Toolbar>
 
         <div className="Board__symbols">
-            {symbols}
+          {symbols}
         </div>
 
         <SymbolDetails
